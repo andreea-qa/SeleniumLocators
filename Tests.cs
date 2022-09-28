@@ -11,7 +11,9 @@ namespace SeleniumLocators
         private static IWebDriver driver;
         private static readonly string gridURL = "@hub.lambdatest.com/wd/hub";
         private static readonly string LT_USERNAME = Environment.GetEnvironmentVariable("LT_USERNAME"); 
-        private static readonly string LT_ACCESS_KEY = Environment.GetEnvironmentVariable("LT_ACCESS_KEY"); 
+        private static readonly string LT_ACCESS_KEY = Environment.GetEnvironmentVariable("LT_ACCESS_KEY");
+        private readonly string loginURL = "https://ecommerce-playground.lambdatest.io/index.php?route=account/login";
+        private readonly string homePageURL = "https://ecommerce-playground.lambdatest.io/index.php";
 
         [SetUp]
         public void Setup()
@@ -32,7 +34,7 @@ namespace SeleniumLocators
         [Test]
         public void ValidateSignIn()
         {
-            driver.Navigate().GoToUrl("https://ecommerce-playground.lambdatest.io/index.php?route=account/login");
+            driver.Navigate().GoToUrl(loginURL);
             driver.FindElement(By.Name("email")).SendKeys("andreea@getnada.com");
             driver.FindElement(By.Id("input-password")).SendKeys("test");
             driver.FindElement(By.CssSelector("#content > div > div:nth-child(2) > div > div > form > input")).Click();
@@ -43,13 +45,14 @@ namespace SeleniumLocators
         [Test]
         public void ValidateNumberOfProducts()
         {
-            driver.Navigate().GoToUrl("https://ecommerce-playground.lambdatest.io/index.php?route=common/home");
+            int expectedNumber = 8; 
+            driver.Navigate().GoToUrl(homePageURL);
             driver.FindElement(By.Name("search")).SendKeys("htc");
             driver.FindElement(By.XPath("//button[text()='Search']")).Click();
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             wait.Until(ExpectedConditions.ElementExists(By.XPath("//h1[text()='Search - htc']")));
             var results = driver.FindElements(By.XPath("//a[text()='HTC Touch HD']"));
-            Assert.That(results, Has.Count.EqualTo(8));
+            Assert.That(results, Has.Count.EqualTo(expectedNumber));
         }
 
         [TearDown]
