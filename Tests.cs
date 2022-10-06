@@ -37,7 +37,7 @@ namespace SeleniumLocators
             driver.Navigate().GoToUrl(loginURL);
             driver.FindElement(By.Name("email")).SendKeys("andreea@getnada.com");
             driver.FindElement(By.Id("input-password")).SendKeys("test");
-            driver.FindElement(By.CssSelector("#content > div > div:nth-child(2) > div > div > form > input")).Click();
+            driver.FindElement(By.CssSelector("input[value='Login']")).Click();
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             wait.Until(ExpectedConditions.ElementExists(By.XPath("//h2[text()='My Account']")));
         }
